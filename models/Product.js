@@ -7,6 +7,10 @@ const productSchema = new mongoose.Schema(
       category: { type: String},
       description: { type: String},
       price: { type: Number},
+
+      cloudinary_id:{
+        type:String,
+      },
      
     },
     {timestamps: true}

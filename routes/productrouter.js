@@ -1,6 +1,8 @@
 const express = require('express');
 const {AddProd,Findsingle, FindAll, Updateprod, DeletePro} =require('../controllers/productController')
 const router =  express.Router();
+const upload = require("../utils/multer");
+
 
 
 router.get('/getp',(req,res)=>{
@@ -12,7 +14,7 @@ router.get('/getp',(req,res)=>{
 
 
 /* add product */
-router.post('/add',AddProd)
+router.post('/add',upload.single("image"),AddProd)
 /* find single  product  */
 router.get('/find/:id', Findsingle)
 
@@ -20,7 +22,7 @@ router.get('/find/:id', Findsingle)
 router.get('/all',FindAll)
 
 /* update product */
-router.put('/up/:id',Updateprod)
+router.put('/up/:id',upload.single("image"),Updateprod)
 
 /* delete product */
 router.delete('/del/:id',DeletePro)
