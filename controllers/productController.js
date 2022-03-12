@@ -29,12 +29,18 @@ const AddProd = async (req,res)=>{
 
 const FindAll =  async (req,res)=>{
     try {
+         //pagination 
+         const resPerPage = 4;
+         const productCount = await product.countDocuments();
+
+        //filtre product categroy & price 
         const apiFeatures = new APIFeatures(product.find(),req.query)
                 .search()
                 .filter()
+                .pagination(resPerPage)
 
     const data = await apiFeatures.query;   
-    res.status(201).json({data})
+    res.status(201).json({data,productCount})
     
     } catch (error) {
         console.log(error.message)
