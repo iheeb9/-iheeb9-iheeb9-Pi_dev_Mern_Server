@@ -1,5 +1,6 @@
 const product =require('../models/Product');
 const cloudinary = require("../utils/cloudinary")
+const APIFeatures = require ('../utils/apiFeatures')
 
 
 const AddProd = async (req,res)=>{
@@ -28,7 +29,11 @@ const AddProd = async (req,res)=>{
 
 const FindAll =  async (req,res)=>{
     try {
-    const data = await product.find()    
+        const apiFeatures = new APIFeatures(product.find(),req.query)
+                .search()
+                .filter()
+
+    const data = await apiFeatures.query;   
     res.status(201).json({data})
     
     } catch (error) {
@@ -66,6 +71,7 @@ const FindAll =  async (req,res)=>{
         description: req.body.description || pr.description,
         price: req.body.price || pr.price,
         image: result?.secure_url || pr.image,
+        category:req.body.category  || pr.category,
         cloudinary_id: result?.public_id || pr.cloudinary_id,
       };
       pr = await product.findByIdAndUpdate(req.params.id, data, { new: true });
