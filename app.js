@@ -21,8 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use ('/api',require('./routes/authRouter'));
 // app.use ('/api',require('./routes/commentRouter'));
-
 // app.use ('/api',require('./routes/postRouter'));
+app.use('/product',require('./routes/productrouter'));
 app.use(cors);
 
 // catch 404 and forward to error handler
