@@ -2,62 +2,65 @@ const Posts = require('../models/postModels')
 const Comments = require('../models/commentModel')
 const Users = require('../models/userModel');
 const userModel = require('../models/userModel');
+const cloudinary=require('../myconfig/images/cloudinary');
+  // const urlsImg=[]
+    // const files=req.files
+    // if ( files){
+    // for (const file of files){
 
-
+    //     const result = await cloudinary.uploader.upload(file.path)
+    //     urlsImg.push(result.secure_url)
+    // }
+    // }
 
 const postCtrl = {
     createPost: async (req, res) => {
-        try {
-            const { content, images } = req.body
+      
+    try{
+    
+  
+       const {title,price,tags,location,cathegorie,content, images } = req.body
 
-            if(images.length === 0)
-            return res.status(400).json({msg: "Please add your photo."})
-
-            const newPost = new Posts({
-                content, images, user: req.user._id
+        const newPost = new Posts({
+            title,price,tags,location,cathegorie,content, images, user:req.user._id
             })
-            await newPost.save()
+        await newPost.save()
           
             res.json({
                 msg: 'Created Post!',
-                newPost: {
-                    ...newPost._doc,
-                    user: req.user
-                }
+                newPost
+                
             })
         } catch (err) {
             return res.status(500).json({msg: err.message})
+            
         }
     },
     getPosts: async (req, res) => {
         try {
             
-            const posts = await Posts.find()
+            const posts = await Posts.find().populate("user","fullname email mobile avatar")
 
             res.json({
                 msg: 'Success!',
                 result: posts.length,
                 posts
             })
-
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
     },
     updatePost: async (req, res) => {
         try {
-            const { content, images } = req.body
+            const {title,price,tags,location,cathegorie,content, images } = req.body
 
             const post = await Posts.findOneAndUpdate({_id: req.params.id}, {
-                content, images
-            })
-
+            title,price,tags,location,cathegorie,content, images,
+            },{returnDocument: 'after'}).populate("user","fullname email mobile avatar")
+           
             res.json({
                 msg: "Updated Post!",
-                newPost: {
-                    ...post._doc,
-                    content, images
-                }
+                post
             })
         } catch (err) {
             return res.status(500).json({msg: err.message})
@@ -129,7 +132,6 @@ const postCtrl = {
         try {
             const post = await Posts.findOneAndDelete({_id: req.params.id, user: req.user._id})
             await Comments.deleteMany({_id: {$in: post.comments }})
-
             res.json({
                 msg: 'Deleted Post!',
                 newPost: {
