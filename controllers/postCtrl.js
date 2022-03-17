@@ -39,7 +39,15 @@ const postCtrl = {
     getPosts: async (req, res) => {
         try {
             
-            const posts = await Posts.find().populate("user","fullname email mobile avatar")
+            const posts = await Posts.find()
+            .populate("user likes","fullname email mobile avatar")
+            .populate({
+                path:"comments",
+                populate:{
+                    path:"user",
+                    select:"-password"
+                }
+            })
 
             res.json({
                 msg: 'Success!',
@@ -113,20 +121,20 @@ const postCtrl = {
             return res.status(500).json({msg: err.message})
         }
     },
-    getPost: async (req, res) => {
-        try {
-            const post = await Posts.findById(req.params.id)
+    // getPost: async (req, res) => {
+    //     try {
+    //         const post = await Posts.findById(req.params.id)
 
-            if(!post) return res.status(400).json({msg: 'This post does not exist.'})
+    //         if(!post) return res.status(400).json({msg: 'This post does not exist.'})
 
-            res.json({
-                post
-            })
+    //         res.json({
+    //             post
+    //         })
 
-        } catch (err) {
-            return res.status(500).json({msg: err.message})
-        }
-    },
+    //     } catch (err) {
+    //         return res.status(500).json({msg: err.message})
+    //     }
+    // },
   
     deletePost: async (req, res) => {
         try {
@@ -144,76 +152,50 @@ const postCtrl = {
             return res.status(500).json({msg: err.message})
         }
     },
-    // getPostsDicover: async (req, res) => {
-    //     try {
-
-    //         const newArr = [...req.user.following, req.user._id]
-
-    //         const num  = req.query.num || 9
-
-    //         const posts = await Posts.aggregate([
-    //             { $match: { user : { $nin: newArr } } },
-    //             { $sample: { size: Number(num) } },
-    //         ])
-
-    //         return res.json({
-    //             msg: 'Success!',
-    //             result: posts.length,
-    //             posts
-    //         })
-
-    //     } catch (err) {
-    //         return res.status(500).json({msg: err.message})
-    //     }
-    // },
-    // savePost: async (req, res) => {
-    //     try {
-    //         const user = await Users.find({_id: req.user._id, saved: req.params.id})
-    //         if(user.length > 0) return res.status(400).json({msg: "You saved this post."})
-
-    //         const save = await Users.findOneAndUpdate({_id: req.user._id}, {
-    //             $push: {saved: req.params.id}
-    //         }, {new: true})
-
-    //         if(!save) return res.status(400).json({msg: 'This user does not exist.'})
-
-    //         res.json({msg: 'Saved Post!'})
-
-    //     } catch (err) {
-    //         return res.status(500).json({msg: err.message})
-    //     }
-    // },
-    // unSavePost: async (req, res) => {
-    //     try {
-    //         const save = await Users.findOneAndUpdate({_id: req.user._id}, {
-    //             $pull: {saved: req.params.id}
-    //         }, {new: true})
-
-    //         if(!save) return res.status(400).json({msg: 'This user does not exist.'})
-
-    //         res.json({msg: 'unSaved Post!'})
-
-    //     } catch (err) {
-    //         return res.status(500).json({msg: err.message})
-    //     }
-    // },
-    // getSavePosts: async (req, res) => {
-    //     try {
-    //         const features = new APIfeatures(Posts.find({
-    //             _id: {$in: req.user.saved}
-    //         }), req.query).paginating()
-
-    //         const savePosts = await features.query.sort("-createdAt")
-
-    //         res.json({
-    //             savePosts,
-    //             result: savePosts.length
-    //         })
-
-    //     } catch (err) {
-    //         return res.status(500).json({msg: err.message})
-    //     }
-    // },
+    searchpost: async (req, res) => {
+        try {
+            const posts = await Posts.find({title: {$regex: req.query.title}})
+            .populate("user likes","fullname email mobile avatar")
+            .populate({
+                path:"comments",
+                populate:{
+                    path:"user",
+                    select:"-password"
+                }
+            })
+            
+            
+            res.json({
+                msg: 'Success!',
+                result: posts.length,
+                posts
+            })
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },
+  
+    catsearch: async (req, res) => {
+        try {
+            const posts = await Posts.find({cathegorie:req.query.cathegorie})
+            .populate("user likes","fullname email mobile avatar")
+            .populate({
+                path:"comments",
+                populate:{
+                    path:"user",
+                    select:"-password"
+                }
+            })
+            
+            res.json({
+                msg: 'Success!',
+                result: posts.length,
+                posts
+            })
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },
 }
 
 module.exports = postCtrl

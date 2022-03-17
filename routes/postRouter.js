@@ -7,11 +7,13 @@ const upload=require('../myconfig/images/multer')
 router.route('/posts')
     .post(auth, postCtrl.createPost)
     .get(postCtrl.getPosts)
-
+    
+router.get('/search',postCtrl.searchpost)
+router.get('/catsearch',postCtrl.catsearch)
 router.route('/post/:id')
     .patch(auth, postCtrl.updatePost)
-    .get( postCtrl.getPost)
     .delete(auth, postCtrl.deletePost)
+    // .get( postCtrl.getPost)
 
 router.patch('/post/:id/like', auth, postCtrl.likePost)
 
