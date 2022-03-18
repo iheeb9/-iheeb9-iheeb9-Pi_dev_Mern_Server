@@ -1,12 +1,18 @@
 const Users = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const sendMail = require('./sendMail')
+const fetch = require('node-fetch')
+const {google} = require('googleapis')
+const {OAuth2} = google.auth
+const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID)
 
+const {CLIENT_URL} = process.env
 const authCtrl = {
     register: async (req, res) => {
         try {
             const { fullname, username, email, password, gender,mobile } = req.body
-            let newUserName = username.toLowerCase().replace(/ /g, '')
+            let newUserName = fullname
 
             const user_name = await Users.findOne({username: newUserName})
             if(user_name) return res.status(400).json({msg: "This user name already exists."})
@@ -26,13 +32,12 @@ const authCtrl = {
 
             const access_token = createAccessToken({id: newUser._id})
             const refresh_token = createRefreshToken({id: newUser._id})
-
             res.cookie('refreshtoken', refresh_token, {
                 httpOnly: true,
                 path: '/api/refresh_token',
                 maxAge: 30*24*60*60*1000 // 30days
             })
-
+            sendMail(email,newUser, "check your email address")
             await newUser.save()
 
             res.json({
@@ -43,6 +48,90 @@ const authCtrl = {
                     password: ''
                 }
             })
+            await newUser.save()
+     
+           
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },
+    googleLogin: async (req, res) => {
+        try {
+            const {tokenId} = req.body
+           
+            const verify = await client.verifyIdToken({idToken: tokenId, audience: process.env.MAILING_SERVICE_CLIENT_ID})
+            
+            const {email_verified, email, name} = verify.payload
+            
+            const password = email + process.env.GOOGLE_SECRET
+
+            const passwordHash = await bcrypt.hash(password, 12)
+
+            if(!email_verified) return res.status(400).json({msg: "Email verification failed."})
+            const user = await Users.findOne({email})
+            
+            if(user){
+                const isMatch = await bcrypt.compare(password, user.password)
+                if(!isMatch) return res.status(400).json({msg: "Password is incorrect."})
+
+                const refresh_token = createRefreshToken({id: user._id})
+                res.cookie('refreshtoken', refresh_token, {
+                    httpOnly: true,
+                    path: '/api/refresh_token',
+                    maxAge: 7*24*60*60*1000 // 7 days
+                })
+                res.json({msg: "Login success!"})
+            }else{
+                const newUser = new Users({
+                     fullname:'hahaha',username:'hahah',email, password: passwordHash
+                })
+              
+                await newUser.save()
+
+               const refresh_token = createRefreshToken({id: newUser._id})
+                res.cookie('refreshtoken', refresh_token, {
+                    httpOnly: true,
+                    path: '/api/refresh_token',
+                    maxAge: 7*24*60*60*1000 // 7 days
+                })
+             
+                res.json({
+                    msg: 'Login Success!',
+                    access_token,
+                    user: {
+                        ...user._doc,
+                        password: ''
+                    }
+                })
+            }
+
+
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },
+     activateEmail: async (req, res) => {  
+        try {
+         
+            const {activation_token} = req.body
+        
+            const user = jwt.verify(activation_token, process.env.REFRESH_TOKEN_SECRET)
+            const { fullname, username, email, password, gender,mobile } = user
+        
+
+            const check = await Users.findOne({email})
+            if(check) return res.status(400).json({msg:"This email already exists."})
+
+            const newUser = new Users({
+                fullname, username, email, password, gender,mobile
+            })
+
+          
+
+          
+
+            res.json({msg: "Account has been activated!"})
+
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
