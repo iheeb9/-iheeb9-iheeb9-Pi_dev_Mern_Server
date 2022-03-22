@@ -1,14 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const types = mongoose.Types;
 
-const adSchema = new mongoose.Schema(
+const AuctionSchema = new mongoose.Schema(
   {
-    productName: {
-      type: String,
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "AuctionProduct",
       required: true,
-    },
-    description: {
-      type: String,
     },
     basePrice: {
       type: types.Decimal128,
@@ -16,24 +14,17 @@ const adSchema = new mongoose.Schema(
     },
     currentPrice: {
       type: types.Decimal128,
+    },
+    startTime: {
+      type: Date,
       required: true,
     },
-    duration: {
-      type: Number,
-      default: 300,
-    },
-    timer: {
-      type: Number,
-      default: 300,
+    endTime: {
+      type: Date,
+      require: true,
     },
     soldAt: {
       type: Date,
-    },
-    image: {
-      type: String,
-    },
-    catergory: {
-      type: String,
     },
     auctionStarted: {
       type: Boolean,
@@ -49,22 +40,23 @@ const adSchema = new mongoose.Schema(
     },
     owner: {
       type: types.ObjectId,
-      ref: 'user',
+      ref: "user",
     },
     purchasedBy: {
       type: types.ObjectId,
-      ref: 'user',
+      ref: "user",
     },
     currentBidder: {
       type: types.ObjectId,
-      ref: 'user',
+      ref: "user",
     },
     bids: [
       {
         user: {
           type: types.ObjectId,
-          ref: 'user',
-          required: true,
+          ref: "user",
+          // TODO: Re-enable
+          // required: true,  
         },
         amount: {
           type: types.Decimal128,
@@ -78,10 +70,10 @@ const adSchema = new mongoose.Schema(
     ],
     room: {
       type: types.ObjectId,
-      ref: 'room',
+      ref: "room",
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('ad', adSchema);
+module.exports = mongoose.model("Auction", AuctionSchema);
