@@ -19,15 +19,17 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-// app.use ('/api',require('./routes/authRouter'));
-// app.use ('/api',require('./routes/commentRouter'));
-// app.use ('/api',require('./routes/postRouter'));
-app.use('/', require("./routes/index"));
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/", require("./routes/index"));
+app.use("/api", require("./routes/authRouter"));
+app.use("/api", require("./routes/commentRouter"));
+app.use("/api", require("./routes/postRouter"));
 app.use("/users", require("./routes/users"));
-app.use('/product',require('./routes/productrouter'));
+app.use("/product", require("./routes/productrouter"));
 app.use("/order", require("./routes/order"));
 app.use("/auction", require("./routes/auction"));
+
 app.use(cors);
 
 // catch 404 and forward to error handler
@@ -49,5 +51,5 @@ app.use(function (err, req, res, next) {
 const uri = process.env.MONGODB_URL;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
   console.log("connected to mongodb")
-)
+);
 module.exports = app;

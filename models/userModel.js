@@ -56,8 +56,6 @@ const userSchema = new mongoose.Schema({
           ref: 'ad',
         },
       ],
-    Allpost: [{type: mongoose.Types.ObjectId, ref: 'post'}],
-    AllPostShared: [{type: mongoose.Types.ObjectId, ref: 'sharedpost'}]
  
 }, {
     timestamps: true
