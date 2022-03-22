@@ -7,11 +7,6 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 const cors = require("cors");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var ordersRouter = require("./routes/order");
-var auctionRouter = require("./routes/auction");
-
 //var orderRouter = require('./routes/order');
 
 var app = express();
@@ -27,12 +22,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use ('/api',require('./routes/authRouter'));
 // app.use ('/api',require('./routes/commentRouter'));
-
 // app.use ('/api',require('./routes/postRouter'));
-app.use('/', indexRouter);
-app.use("/users", usersRouter);
-app.use("/order", ordersRouter);
-app.use("/auction", auctionRouter);
+app.use('/', require("./routes/index"));
+app.use("/users", require("./routes/users"));
+app.use('/product',require('./routes/productrouter'));
+app.use("/order", require("./routes/order"));
+app.use("/auction", require("./routes/auction"));
 app.use(cors);
 
 // catch 404 and forward to error handler
