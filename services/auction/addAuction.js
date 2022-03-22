@@ -19,6 +19,7 @@ async function addAuction(req, res) {
     const auction = new Auction({
       product: createdProduct._id,
       basePrice: product.price,
+      currentPrice: product.price,
       startTime: req.body.startTime,
       endTime: req.body.endTime,
     });

@@ -27,8 +27,8 @@ app.use("/api", require("./routes/commentRouter"));
 app.use("/api", require("./routes/postRouter"));
 app.use("/users", require("./routes/users"));
 app.use("/product", require("./routes/productrouter"));
-app.use("/order", require("./routes/order"));
-app.use("/auction", require("./routes/auction"));
+app.use("/order", require("./routes/orderRouter"));
+app.use("/auction", require("./routes/auctionRouter"));
 
 app.use(cors);
 

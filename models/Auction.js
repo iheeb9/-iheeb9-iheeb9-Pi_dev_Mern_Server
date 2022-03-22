@@ -55,8 +55,7 @@ const AuctionSchema = new mongoose.Schema(
         user: {
           type: types.ObjectId,
           ref: "user",
-          // TODO: Re-enable
-          // required: true,  
+         required: true,  
         },
         amount: {
           type: types.Decimal128,
