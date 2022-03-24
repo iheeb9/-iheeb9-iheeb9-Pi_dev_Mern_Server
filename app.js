@@ -26,8 +26,12 @@ app.use ('/api',require('./routes/sharedpostRouter'));
 app.use ('/api',require('./routes/postRouter'));
 app.use ('/api',require('./routes/userRouter'));
 // app.use ('/api',require('./routes/commentRouter'));
-
 // app.use ('/api',require('./routes/postRouter'));
+
+app.use('/product',require('./routes/productrouter'));
+app.use('/category',require('./routes/categoryrouter'))
+
+
 
 app.use(cors);
 
