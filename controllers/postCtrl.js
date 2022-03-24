@@ -37,7 +37,7 @@ const postCtrl = {
         try {
             
             const posts = await Posts.find()
-            .populate("user likes","fullname email mobile images    ")
+            .populate("user likes","fullname email mobile images  ")
             .populate({
                 path:"comments",
                 populate:{
@@ -61,7 +61,7 @@ const postCtrl = {
 
             const post = await Posts.findOneAndUpdate({_id: req.params.id}, {
             title,price,tags,location,cathegorie,content, images,
-            },{returnDocument: 'after'}).populate("user","fullname email mobile avatar")
+            },{returnDocument: 'after'}).populate("user","fullname email mobile images")
            
             res.json({
                 msg: "Updated Post!",
