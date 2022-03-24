@@ -20,14 +20,13 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
         unique: true
-    },
+    },images: {
+      type: Array,
+      required: true
+  },
     password: {
         type: String,
         required: true
-    },
-    avatar:{
-        type: String,
-        default: 'https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png'
     },
     role: {type: String, default: 'user'},
     gender: {type: String, default: 'male'},
