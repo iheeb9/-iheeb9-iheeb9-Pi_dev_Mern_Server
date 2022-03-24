@@ -18,7 +18,7 @@ const oauth2Client = new OAuth2(
 )
 
 // send mail
-const sendEmail = (to, newUser, txt) => {
+const sendEmail = (to, url, txt) => {
     oauth2Client.setCredentials({
         refresh_token: MAILING_SERVICE_REFRESH_TOKEN
     })
@@ -45,7 +45,7 @@ const sendEmail = (to, newUser, txt) => {
             <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the DEVOPS  SITES :p .</h2>
             <p>Congratulations! You're about  to start using DEVAT✮SHOP.
                 Just click the button below to validate your email address.
-                ${newUser}
+                ${url}
             </p>
             </div>
         `
