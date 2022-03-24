@@ -1,8 +1,5 @@
 const Posts = require('../models/postModels')
 const Comments = require('../models/commentModel')
-const Users = require('../models/userModel');
-const userModel = require('../models/userModel');
-const cloudinary=require('../myconfig/images/cloudinary');
   // const urlsImg=[]
     // const files=req.files
     // if ( files){
