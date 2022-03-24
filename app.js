@@ -20,16 +20,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use ('/api',require('./routes/authRouter'));
-<<<<<<< HEAD
+
 app.use ('/api',require('./routes/commentRouter'));
 app.use ('/api',require('./routes/sharedpostRouter'));
 app.use ('/api',require('./routes/postRouter'));
-=======
 app.use ('/api',require('./routes/userRouter'));
 // app.use ('/api',require('./routes/commentRouter'));
 
 // app.use ('/api',require('./routes/postRouter'));
->>>>>>> 2e12b65f19753ac48a1f06312651f96ebcb12756
+
 app.use(cors);
 
 // catch 404 and forward to error handler

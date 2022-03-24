@@ -37,7 +37,7 @@ const postCtrl = {
         try {
             
             const posts = await Posts.find()
-            .populate("user likes","fullname email mobile avatar")
+            .populate("user likes","fullname email mobile images    ")
             .populate({
                 path:"comments",
                 populate:{
