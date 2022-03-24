@@ -8,11 +8,13 @@ const {OAuth2} = google.auth
 const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID)
 
 const {CLIENT_URL} = process.env
+
 const authCtrl = {
     register: async (req, res) => {
         try {
-            const { fullname, username, email, password, gender,mobile,images } = req.body
-            let newUserName = fullname
+            const { fullname, username, email, password, gender } = req.body
+            let newUserName = username.toLowerCase().replace(/ /g, '')
+
 
             const user_name = await Users.findOne({username: newUserName})
             if(user_name) return res.status(400).json({msg: "This user name already exists."})
@@ -26,18 +28,23 @@ const authCtrl = {
             const passwordHash = await bcrypt.hash(password, 12)
 
             const newUser = new Users({
+
                 fullname, username: newUserName, email, password: passwordHash, gender,mobile,images
+
             })
 
 
             const access_token = createAccessToken({id: newUser._id})
             const refresh_token = createRefreshToken({id: newUser._id})
+
             res.cookie('refreshtoken', refresh_token, {
                 httpOnly: true,
                 path: '/api/refresh_token',
                 maxAge: 30*24*60*60*1000 // 30days
             })
+
             sendMail(email,newUser, "check your email address")
+
             await newUser.save()
 
             res.json({
@@ -48,6 +55,7 @@ const authCtrl = {
                     password: ''
                 }
             })
+
             await newUser.save()
      
            
