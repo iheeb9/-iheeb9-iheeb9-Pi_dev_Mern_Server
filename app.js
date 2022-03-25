@@ -19,16 +19,21 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use ('/api',require('./routes/authRouter'));
 
-app.use("/", require("./routes/index"));
-app.use("/api", require("./routes/authRouter"));
-app.use("/api", require("./routes/commentRouter"));
-app.use("/api", require("./routes/postRouter"));
-app.use("/users", require("./routes/users"));
-app.use("/product", require("./routes/productrouter"));
-app.use("/order", require("./routes/orderRouter"));
-app.use("/auction", require("./routes/auctionRouter"));
+app.use ('/api',require('./routes/commentRouter'));
+app.use ('/api',require('./routes/sharedpostRouter'));
+app.use ('/api',require('./routes/postRouter'));
+app.use ('/api',require('./routes/userRouter'));
+// app.use ('/api',require('./routes/commentRouter'));
+// app.use ('/api',require('./routes/postRouter'));
+
+app.use('/api/product',require('./routes/productrouter'));
+app.use('/category',require('./routes/categoryrouter'))
+app.use("/api/order", require("./routes/orderRouter"));
+app.use("/api/auction", require("./routes/auctionRouter"));
+
 
 app.use(cors);
 

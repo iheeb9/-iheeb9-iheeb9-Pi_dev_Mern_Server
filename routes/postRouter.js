@@ -1,8 +1,6 @@
 const router = require('express').Router()
 const postCtrl = require('../controllers/postCtrl')
 const auth = require('../middleware/auth')
-const upload=require('../myconfig/images/multer')
-
 
 router.route('/posts')
     .post(auth, postCtrl.createPost)
