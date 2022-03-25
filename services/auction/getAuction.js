@@ -3,7 +3,7 @@ const Auction = require("../../models/Auction");
 async function getAuction(req, res) {
   const id = req.params.id;
   try {
-    const result = await Auction.findById(id);
+    const result = await Auction.findById(id).populate('product');
     res.json(result);
   } catch (error) {
     console.error(error);
