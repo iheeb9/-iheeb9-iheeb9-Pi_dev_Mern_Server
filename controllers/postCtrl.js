@@ -1,8 +1,5 @@
 const Posts = require('../models/postModels')
 const Comments = require('../models/commentModel')
-const Users = require('../models/userModel');
-const userModel = require('../models/userModel');
-const cloudinary=require('../myconfig/images/cloudinary');
   // const urlsImg=[]
     // const files=req.files
     // if ( files){
@@ -40,7 +37,7 @@ const postCtrl = {
         try {
             
             const posts = await Posts.find()
-            .populate("user likes","fullname email mobile avatar")
+            .populate("user likes","fullname email mobile images  ")
             .populate({
                 path:"comments",
                 populate:{
@@ -64,7 +61,7 @@ const postCtrl = {
 
             const post = await Posts.findOneAndUpdate({_id: req.params.id}, {
             title,price,tags,location,cathegorie,content, images,
-            },{returnDocument: 'after'}).populate("user","fullname email mobile avatar")
+            },{returnDocument: 'after'}).populate("user","fullname email mobile images")
            
             res.json({
                 msg: "Updated Post!",

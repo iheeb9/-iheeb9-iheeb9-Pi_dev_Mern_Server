@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema(
     {
       name: { type: String },
-      image: { type: String },
+      image: { type: Array },
       brand: { type: String},
       category: {
          type: String,
@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema(
         },
       description: { type: String},
       price: { type: Number,default: 0},
-      countInStock: {type: String ,default: 0},
+      countInStock: {type: Number,default:0 },
       cloudinary_id:{
         type:String,
       },
