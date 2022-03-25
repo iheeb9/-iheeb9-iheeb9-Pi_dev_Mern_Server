@@ -28,7 +28,7 @@ app.use ('/api',require('./routes/userRouter'));
 // app.use ('/api',require('./routes/commentRouter'));
 // app.use ('/api',require('./routes/postRouter'));
 
-app.use('/product',require('./routes/productrouter'));
+app.use('/api/product',require('./routes/productrouter'));
 app.use('/category',require('./routes/categoryrouter'))
 
 
