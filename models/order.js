@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 
-const orderSchema = new mongoose.Schema( {
-        _id: {
-          type: String,
-          default: shortid.generate,
-        },
+const ordersSchema = new mongoose.Schema( {
+       
         email: String,
         name: String,
         address: String,
@@ -23,4 +20,4 @@ const orderSchema = new mongoose.Schema( {
       }
     )
   
-  module.exports= mongoose.model('orders', orderSchema);
+  module.exports= mongoose.model('orders', ordersSchema);

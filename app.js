@@ -33,6 +33,7 @@ app.use('/api/product',require('./routes/productrouter'));
 app.use('/category',require('./routes/categoryrouter'))
 app.use("/api/order", require("./routes/orderRouter"));
 app.use("/api/auction", require("./routes/auctionRouter"));
+app.use("/api/orders", require("./routes/ordersRouter"));
 
 
 app.use(cors);
