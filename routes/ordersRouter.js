@@ -4,18 +4,17 @@ var router = express.Router();
 
 router.post("/api/order", async (req, res) => {
     if (
-        !req.body.name ||
-        !req.body.email ||
-        !req.body.address ||
+        !req.body.shippingAddress ||
+        !req.body.paymentMethod ||
         !req.body.total ||
         !req.body.cartItems
     ) {
         return res.send({ message: "Data is required." });
     } else {
         const order = new orders({
-            name: req.body.name,
             email: req.body.email,
-            address: req.body.address,
+            shippingAddress: req.body.shippingAddress,
+            paymentMethod: req.body.paymentMethod,
             cartItems: req.body.cartItems,
             total: req.body.total,
 
