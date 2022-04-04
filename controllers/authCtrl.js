@@ -12,7 +12,7 @@ const {CLIENT_URL} = process.env
 const authCtrl = {
     register: async (req, res) => {
         try {
-            const { fullname, username, email, password, gender,mobile,images } = req.body
+            const { fullname, username, email, password, gender,mobile,images} = req.body
             let newUserName = username.toLowerCase().replace(/ /g, '')
 
 

@@ -12,6 +12,26 @@ const userCtrl = {
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
+    }, 
+    MakeUser: async (req, res) => {
+        try {
+           let role="admin"
+            await Users.findOneAndUpdate({_id: req.params.id}, {
+                role
+            })
+                     res.json({msg: "Update Success!"})
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },FindUser : async (req,res)=>{
+        try {
+            const data = await Users.findOne({_id: req.params.id})    
+            res.status(201).json({data})
+            
+            } catch (error) {
+                console.log(error.message)
+            
+            }
     },
     getUsersAllInfor: async (req, res) => {
         try {
@@ -25,6 +45,17 @@ const userCtrl = {
             })
         }
     },
+    deleteUser: async (req, res) => {
+        try { 
+            const user = await Users.findOneAndDelete({_id: req.params.id})
+            res.json({
+                msg: 'Deleted User!'
+            })
+
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    }
 
 
 
