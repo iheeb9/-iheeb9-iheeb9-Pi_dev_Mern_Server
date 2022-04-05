@@ -1,4 +1,5 @@
 const Auction = require("../../models/Auction");
+const { socket } = require("../../socket");
 
 async function placeAuctionBid(req, res) {
   const user = req.user;
@@ -41,6 +42,8 @@ async function placeAuctionBid(req, res) {
   try {
     // save to db
     const result = await auction.save();
+    await result.populate('bids.user');
+    socket.emit("bid-placed", { id: auction._id, auction: result });
     res.json(result);
   } catch (error) {
     res.status(500).send({ message: "Couldn't place Auction bid" });
