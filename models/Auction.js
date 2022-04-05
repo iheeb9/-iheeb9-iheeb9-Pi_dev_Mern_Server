@@ -8,6 +8,7 @@ const AuctionSchema = new mongoose.Schema(
       ref: "AuctionProduct",
       required: true,
     },
+ 
     basePrice: {
       type: types.Decimal128,
       required: true,
