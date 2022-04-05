@@ -14,6 +14,14 @@ const ordersSchema = new mongoose.Schema( {
             count: Number,
           },
         ],
+        shippingAddress: {
+          address: { type: String },
+          city: { type: String },
+          postalCode: { type: String },
+          country: { type: String },
+          lat: Number,
+          lng: Number,
+        },
       },
       {
         timestamps: true,
