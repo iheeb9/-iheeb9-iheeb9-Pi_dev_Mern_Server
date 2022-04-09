@@ -9,8 +9,10 @@ const sharedpost = new mongoose.Schema({
     },
     reaction:[String],
     topreview: [String],
+    badreview: [String],
     affect_frequencies:[Object],
-    top_emotions: [Object],   
+    top_emotions: [Object],  
+     
     
     idreviw:String,
     user: {type: mongoose.Types.ObjectId, ref: 'user'}
