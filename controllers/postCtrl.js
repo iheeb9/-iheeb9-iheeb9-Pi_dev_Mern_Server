@@ -61,7 +61,7 @@ const postCtrl = {
 
             const post = await Posts.findOneAndUpdate({_id: req.params.id}, {
             title,price,tags,location,cathegorie,content, images,
-            },{returnDocument: 'after'}).populate("user","fullname email mobile images")
+            },{returnDocument: 'after'}).populate("user likes","fullname email mobile images")
            
             res.json({
                 msg: "Updated Post!",
@@ -152,7 +152,7 @@ const postCtrl = {
     searchpost: async (req, res) => {
         try {
             const posts = await Posts.find({title: {$regex: req.query.title}})
-            .populate("user likes","fullname email mobile avatar")
+            .populate("user likes","fullname email mobile images")
             .populate({
                 path:"comments",
                 populate:{
@@ -175,7 +175,7 @@ const postCtrl = {
     catsearch: async (req, res) => {
         try {
             const posts = await Posts.find({cathegorie:req.query.cathegorie})
-            .populate("user likes","fullname email mobile avatar")
+            .populate("user likes","fullname email mobile images")
             .populate({
                 path:"comments",
                 populate:{
@@ -191,6 +191,41 @@ const postCtrl = {
             })
         } catch (err) {
             return res.status(500).json({msg: err.message})
+        }
+    },
+
+    searchimage: async (req, res) => {
+        try {
+            
+            let id=[]
+            let posts=[]
+            req.body.map(v => id.push(v.$oid))
+          for (let v of id){
+              
+            const a= await Posts.findById(v).populate("user likes","fullname email mobile images")
+            .populate({
+                path:"comments",
+                populate:{
+                    path:"user",
+                    select:"-password"
+                }
+            })
+            console.log(a)
+            posts.push(a)
+            
+          } 
+    
+            //const posts= await Posts.find({_id:{$in:id}})
+            
+            console.log(posts)
+        
+            res.json({
+                msg: 'Success!',
+                result: posts.length,
+                posts
+            })
+        } catch (err) {
+            return res.status(500)
         }
     },
 }

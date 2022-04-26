@@ -7,6 +7,7 @@ router.route('/posts')
     .get(postCtrl.getPosts)
     
 router.get('/search',postCtrl.searchpost)
+router.post('/searchimage',postCtrl.searchimage)
 router.get('/catsearch',postCtrl.catsearch)
 router.route('/post/:id')
     .patch(auth, postCtrl.updatePost)
