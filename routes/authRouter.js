@@ -9,9 +9,13 @@ router.post('/register', authCtrl.register)
 
 router.post('/login', authCtrl.login)
 
+router.post('/faceId', authCtrl.faceId)
+
 router.post('/logout', authCtrl.logout)
 
 router.post('/google_login', authCtrl.googleLogin)
+
+router.post('/facebook_login', authCtrl.facebookLogin)
 
 router.post('/forgotPassword', authCtrl.forgotPassword)
 
