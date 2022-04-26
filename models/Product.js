@@ -28,11 +28,23 @@ const productSchema = new mongoose.Schema(
       cloudinary_id:{
         type:String,
       },
+      raitings :{type:Number,default:0},
+      numOfReviews :{type:Number,default:0},
+      reviews:[
+        {
+          user: {type: mongoose.Types.ObjectId, ref: 'user'},
+          name:{type:String},
+          raiting:{type:Number},   
+        }
+      ],
+
+     
      
     },
     {timestamps: true}
    
   );
+  
   
   module.exports= mongoose.model('product', productSchema);
   

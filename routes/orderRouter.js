@@ -1,11 +1,10 @@
 var express = require('express');
 
 const orders = require('../models/Orders');
-const Orders = require('../models/Orders');
 
 
 var router = express.Router();
-router.post('/', function (req, res, next) {
+/* router.post('/', function (req, res, next) {
     new orders({ isPaid: req.body.isPaid }).save(
         (err, neworders) => {
             if (err)
@@ -77,6 +76,6 @@ router.put('/:id', async function (req, res, next){
         res.status(404).send({ message: 'Order Not Found' });
       }
     })
-  ;
+  ; */
 module.exports = router;
 

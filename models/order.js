@@ -9,19 +9,24 @@ const ordersSchema = new mongoose.Schema( {
         cartItems: [
           {
             _id: String,
-            title: String,
+            name: String,
             price: Number,
             count: Number,
           },
         ],
-        shippingAddress: {
-          address: { type: String },
-          city: { type: String },
-          postalCode: { type: String },
-          country: { type: String },
-          lat: Number,
-          lng: Number,
+        shippingAddress:[
+          {
+          address:  String ,
+          city: String ,
+          postalCode:  String,
+          country:  String ,
+          
         },
+        ] ,
+          user: {type: mongoose.Types.ObjectId, ref: 'user'}
+
+
+        
       },
       {
         timestamps: true,

@@ -1,6 +1,10 @@
 const product =require('../models/Product');
 const cloudinary = require("../utils/cloudinary")
-const APIFeatures = require ('../utils/apiFeatures')
+const APIFeatures = require ('../utils/apiFeatures');
+const Product = require('../models/Product');
+const Users = require('../models/userModel');
+const category = require('../models/category');
+
 
 
 const AddProd = async (req,res)=>{
@@ -61,6 +65,30 @@ const FindAll =  async (req,res)=>{
         
         }
         }
+
+//afficher les trois denier produits
+const FindLast =  async (req,res)=>{
+    try {
+    const data = await  product.find().limit(4)
+    res.status(201).json({data})
+    
+    } catch (error) {
+        console.log(error.message)
+    
+    }
+    }
+
+//afficher selon category
+const FindLastcat =  async (req,res)=>{
+    try {
+    const data =   await product.find({category:"Laptop"}).limit(2)
+    res.status(201).json({data})
+    
+    } catch (error) {
+        console.log(error.message)
+    
+    }
+    }
     
     const Findsingle = async (req,res)=>{
         try {
@@ -118,11 +146,87 @@ const FindAll =  async (req,res)=>{
             
             }
         }
+
+    //create new review => 
+     const CreateProductReview = async (req,res)=> {
+        const {raiting , productId} =req.body;
+       // const user = await Users.findById(req.params.id)
+       
+
+
+         const review ={
+           user:req.user._id,
+           name :req.user.fullname,
+            raiting: Number(raiting)
+        }
+        
+        const pr = await product.findById(productId);
+    
+
+        const isReviewed = pr.reviews.find (
+            r=> r.user.toString()=== req.user._id.toString()
+        )
+        if(isReviewed){
+            pr.reviews.forEach(review => {
+                if(review.user.toString() === req.user._id.toString()){
+                    review.raiting =raiting;
+                }
+            })
+
+        }else{
+            pr.reviews.push(review);
+            pr.numOfReviews= pr.reviews.length
+        }
+
+        pr.raitings = pr.reviews.reduce((raitings,review)=> review.raiting + raitings, 0) / pr.reviews.length
+            await pr.save({validateBeforesave : false}); 
+                  res.status(200).json({success : true,review})
+    }
+
+/* Get Product Reviews */
+
+const getProductReviews = async (req,res )=>{
+       let pr = await product.findById(req.query.id);
+
+        res.status(200).json({
+            success : true ,
+           reviews :pr.reviews
+        })   
+        
+    }
+
+    /* Delete Product Reviews */
+
+    const delReviews = async (req,res,next )=>{
+        const pr = await product.findById(req.query.productId);
+            const reviews = pr.reviews.filter(review => review._id.toString() !== req.query.id.toString())
+            const numOfReviews = reviews.length
+            const raitings =  pr.raitings = pr.reviews.reduce((raitings,review)=> review.raiting + raitings, 0) / pr.reviews.length
+
+
+            await product.findByIdAndUpdate(req.query.productId,{
+                reviews,
+                raitings,
+                numOfReviews
+            },{
+                new: true,
+                runValidators:true,
+                useFindAndModify:false
+            })
+            res.status(200).json({
+            success : true ,
+        })
+    }
 module.exports = {
     AddProd,
      FindAll,
      Findsingle,
      Updateprod,
      DeletePro,
-     FindAllP
+     FindAllP,
+     FindLast,
+     FindLastcat,
+     delReviews,
+     CreateProductReview,
+     getProductReviews,
 }
