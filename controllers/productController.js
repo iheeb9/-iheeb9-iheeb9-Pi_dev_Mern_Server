@@ -69,7 +69,7 @@ const FindAll =  async (req,res)=>{
 //afficher les trois denier produits
 const FindLast =  async (req,res)=>{
     try {
-    const data = await  product.find().limit(4)
+    const data = await  product.find().limit(4).sort( { createdAt:-1 } )
     res.status(201).json({data})
     
     } catch (error) {
@@ -81,7 +81,7 @@ const FindLast =  async (req,res)=>{
 //afficher selon category
 const FindLastcat =  async (req,res)=>{
     try {
-    const data =   await product.find({category:"Laptop"}).limit(2)
+    const data =   await product.find({category:"Electronics"}).limit(2)
     res.status(201).json({data})
     
     } catch (error) {

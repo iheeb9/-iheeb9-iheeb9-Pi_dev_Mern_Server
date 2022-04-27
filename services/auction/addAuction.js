@@ -2,10 +2,11 @@ const Auction = require("../../models/Auction");
 const AuctionProduct = require("../../models/AuctionProduct");
 
 async function addAuction(req, res) {
-  const { product ,image} = req.body;
+  const { product } = req.body;
+  console.log(product.image)
   const auctionProduct = new AuctionProduct({
     name: product.name,
-    image: image,
+    images: product.image,
     description: product.description,
     price: product.price,
   });
